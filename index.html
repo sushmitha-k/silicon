@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Silicon | Three.JS</title>
+    <script src="https://unpkg.com/three@0.101.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.101.0/examples/js/WebGL.js"></script>
+    <script src="https://unpkg.com/three@0.101.0/examples/js/libs/stats.min.js"></script>
+    <script src="https://unpkg.com/three@0.101.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container"></div>
+
+<script>
+  window.addEventListener('load', function() {
+  if ( !WEBGL.isWebGLAvailable() ) {
+    const warning = WEBGL.getWebGLErrorMessage();
+    document.getElementById('container').appendChild( warning );
+  }
+
+  let w = window.innerWidth, h = window.innerHeight;
+  let scene, bbox;
+  let container, renderer, camera, controls, stats;
+
+
+  (function init() {
+    renderer = new THREE.WebGLRenderer({
+      antialias: true
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(w, h);
+    container = document.getElementById('container');
+    container.appendChild(renderer.domElement);
+    stats = new Stats();
+    container.appendChild(stats.dom);
+    stats.dom.style.position = 'absolute';
+
+    scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0xffffff, 0.002);
+    renderer.setClearColor(scene.fog.color);
+
+    camera = new THREE.PerspectiveCamera(60, w / h, 1, 2000);
+    camera.position.x = 20;
+    camera.position.y = 20;
+    camera.position.z = 20;
+    camera.lookAt(new THREE.Vector3(0, 5, 0));
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+    const gridXZ = new THREE.GridHelper(500, 10);
+    // scene.add(gridXZ);
+
+    let light = new THREE.DirectionalLight(0xffffff);
+    light.position.set(1, 1, 1);
+    scene.add(light);
+    light = new THREE.DirectionalLight(0x002288);
+    light.position.set(-1, -1, -1);
+    scene.add(light);
+    light = new THREE.AmbientLight(0x222222);
+    scene.add(light);
+
+    const geometry = new THREE.BoxGeometry(10, 10, 10);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x000000,
+    });
+    const cube = new THREE.Mesh(geometry, material);
+    cube.translateY(5);
+    bbox = new THREE.BoxHelper(cube, 0x0000ff);
+    const circle = new THREE.SphereGeometry(1, 32, 32);
+
+    var corner1 =new THREE.Mesh(circle, material);
+    var corner2 =new THREE.Mesh(circle, material);
+    var corner3 =new THREE.Mesh(circle, material);
+    var corner4 =new THREE.Mesh(circle, material);
+    var corner5 =new THREE.Mesh(circle, material);
+    var corner6 =new THREE.Mesh(circle, material);
+    var corner7 =new THREE.Mesh(circle, material);
+    var corner8 =new THREE.Mesh(circle, material);
+    corner1.position.set(5, 10, 5);
+    corner2.position.set(-5, 10, 5);
+    corner3.position.set(-5, 10, -5);
+    corner4.position.set(5, 10, -5);
+    corner5.position.set(5, 0, 5);
+    corner6.position.set(-5, 0, 5);
+    corner7.position.set(-5, 0, -5);
+    corner8.position.set(5, 0, -5);
+    bbox.add(corner1);
+    bbox.add(corner2);
+    bbox.add(corner3);
+    bbox.add(corner4);
+    bbox.add(corner5);
+    bbox.add(corner6);
+    bbox.add(corner7);
+    bbox.add(corner8);
+
+    var face1 =new THREE.Mesh(circle, material);
+    var face2 =new THREE.Mesh(circle, material);
+    var face3 =new THREE.Mesh(circle, material);
+    var face4 =new THREE.Mesh(circle, material);
+    var face5 =new THREE.Mesh(circle, material);
+    var face6 =new THREE.Mesh(circle, material);
+    face2.position.set(0, 0, 0);
+    face3.position.set(0, 5, 5);
+    face4.position.set(0, 5, -5);
+    face5.position.set(5, 5, 0);
+    face6.position.set(-5, 5, 0);
+    face1.position.set(0, 10, 0);
+    bbox.add(face1);
+    bbox.add(face2);
+    bbox.add(face3);
+    bbox.add(face4);
+    bbox.add(face5);
+    bbox.add(face6);
+
+    var vertice1 =new THREE.Mesh(circle, material);
+    var vertice2 =new THREE.Mesh(circle, material);
+    var vertice3 =new THREE.Mesh(circle, material);
+    var vertice4 =new THREE.Mesh(circle, material);
+
+    vertice1.position.set(2.5, 2.5, 2.5);
+    vertice2.position.set(-2.5, 2.5, -2.5);
+    vertice3.position.set(2.5, 7.5, -2.5);
+    vertice4.position.set(-2.5, 7.5, 2.5);
+
+    bbox.add(vertice1);
+    bbox.add(vertice2);
+    bbox.add(vertice3);
+    bbox.add(vertice4);
+
+    var geometry1 = new THREE.Geometry();
+
+    geometry1.vertices.push(new THREE.Vector3(5, 5, 0), new THREE.Vector3(2.5, 2.5, 2.5));
+    geometry1.vertices.push(new THREE.Vector3(2.5, 2.5, 2.5), new THREE.Vector3(5, 0, 5));
+    geometry1.vertices.push(new THREE.Vector3(2.5, 2.5, 2.5), new THREE.Vector3(0, 5, 5));
+    geometry1.vertices.push(new THREE.Vector3(2.5, 2.5, 2.5), new THREE.Vector3(0, 0, 0));
+
+    geometry1.vertices.push(new THREE.Vector3(0, 0, 0), new THREE.Vector3(-2.5, 2.5, -2.5));
+    geometry1.vertices.push(new THREE.Vector3(-2.5, 2.5, -2.5), new THREE.Vector3(-5, 0, -5));
+    geometry1.vertices.push(new THREE.Vector3(-2.5, 2.5, -2.5), new THREE.Vector3(-5, 5, 0));
+    geometry1.vertices.push(new THREE.Vector3(-2.5, 2.5, -2.5), new THREE.Vector3(0, 5, -5));
+
+    var geometry2 = new THREE.Geometry();
+
+    geometry2.vertices.push(new THREE.Vector3(5, 5, 0), new THREE.Vector3(2.5, 7.5, -2.5));
+    geometry2.vertices.push(new THREE.Vector3(2.5, 7.5, -2.5), new THREE.Vector3(5, 10, -5));
+    geometry2.vertices.push(new THREE.Vector3(2.5, 7.5, -2.5), new THREE.Vector3(0, 5, -5));
+    geometry2.vertices.push(new THREE.Vector3(2.5, 7.5, -2.5), new THREE.Vector3(0, 10, 0));
+
+
+    geometry2.vertices.push(new THREE.Vector3(0, 10, 0), new THREE.Vector3(-2.5, 7.5, 2.5));
+    geometry2.vertices.push(new THREE.Vector3(-2.5, 7.5, 2.5), new THREE.Vector3(-5, 10, 5));
+    geometry2.vertices.push(new THREE.Vector3(-2.5, 7.5, 2.5), new THREE.Vector3(0, 5, 5));
+    geometry2.vertices.push(new THREE.Vector3(-2.5, 7.5, 2.5), new THREE.Vector3(-5, 5, 0));
+
+    var matline = new THREE.LineBasicMaterial( { color: 0xaaaaaa,  linewidth: 10, linecap: 'round', linejoin:  'round'} );
+    var line = new THREE.Line(geometry1, matline);
+
+    var line2 = new THREE.Line(geometry2, matline);
+      bbox.add(line);
+      bbox.add(line2)
+      scene.add(bbox);
+      window.addEventListener('resize', onWindowResize, false);
+    })();
+
+    function onWindowResize() {
+      w = window.innerWidth;
+      h = window.innerHeight;
+
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+
+    var speed = 0.001;
+
+    function rotateCube() {
+      scene.rotation.x -= speed * 2;
+      scene.rotation.y -= speed;
+      scene.rotation.z -= speed * 3;
+    }
+
+    (function animate() {
+      requestAnimationFrame(animate);
+      rotateCube();
+      renderer.render(scene, camera);
+      stats.update();
+    })();
+  });
+</script>
+</body>
+</html>
